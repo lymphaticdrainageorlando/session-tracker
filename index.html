@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session Tracker — Masajes Terapéuticos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --warm: #E8DDD0;
+    --stone: #C4B5A0;
+    --brown: #7A6552;
+    --deep: #3D2B1F;
+    --gold: #B8965A;
+    --green: #5A7A6A;
+    --red: #8B3A3A;
+    --white: #FDFBF8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    color: var(--deep);
+  }
+
+  /* ── VIEWS ── */
+  .view { display: none; min-height: 100vh; }
+  .view.active { display: flex; flex-direction: column; }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--deep);
+    color: var(--cream);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  header h1 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; letter-spacing: 0.05em; }
+  header span { font-size: 0.75rem; color: var(--stone); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .back-btn {
+    background: none; border: 1px solid var(--stone); color: var(--cream);
+    padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+  }
+  .back-btn:hover { background: var(--stone); color: var(--deep); }
+
+  /* ── HOME ── */
+  #home .content { flex: 1; padding: 32px 24px; display: flex; flex-direction: column; gap: 16px; }
+
+  .search-bar {
+    background: var(--white); border: 1.5px solid var(--warm);
+    border-radius: 12px; padding: 12px 18px; font-size: 1rem;
+    font-family: 'DM Sans', sans-serif; color: var(--deep); width: 100%;
+    outline: none; transition: border-color 0.2s;
+  }
+  .search-bar:focus { border-color: var(--gold); }
+
+  .section-label {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--stone); margin-top: 8px;
+  }
+
+  .patient-card {
+    background: var(--white); border-radius: 14px; padding: 18px 20px;
+    cursor: pointer; transition: all 0.2s; border: 1.5px solid transparent;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(61,43,31,0.06);
+  }
+  .patient-card:hover { border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(61,43,31,0.1); }
+
+  .patient-info h3 { font-size: 1rem; font-weight: 500; color: var(--deep); }
+  .patient-info p { font-size: 0.78rem; color: var(--stone); margin-top: 3px; }
+
+  .sessions-badge {
+    background: var(--deep); color: var(--cream);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 0.75rem; font-weight: 500; white-space: nowrap;
+  }
+  .sessions-badge.low { background: var(--red); }
+  .sessions-badge.done { background: var(--stone); }
+
+  .add-patient-btn {
+    background: var(--gold); color: var(--white); border: none;
+    border-radius: 12px; padding: 14px; font-size: 0.9rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    cursor: pointer; transition: all 0.2s; margin-top: 8px;
+    letter-spacing: 0.02em;
+  }
+  .add-patient-btn:hover { background: var(--brown); }
+
+  /* ── PATIENT DETAIL ── */
+  #detail .content { flex: 1; padding: 28px 24px; overflow-y: auto; }
+
+  .patient-header {
+    background: var(--white); border-radius: 16px; padding: 24px;
+    margin-bottom: 20px; box-shadow: 0 2px 8px rgba(61,43,31,0.06);
+  }
+  .patient-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; }
+  .patient-header p { color: var(--stone); font-size: 0.85rem; margin-top: 4px; }
+
+  .sessions-remaining {
+    margin-top: 16px; display: flex; align-items: center; gap: 16px;
+  }
+  .big-number {
+    font-family: 'Cormorant Garamond', serif; font-size: 3.5rem;
+    font-weight: 300; color: var(--gold); line-height: 1;
+  }
+  .big-number.low { color: var(--red); }
+  .big-number.done { color: var(--stone); }
+  .sessions-label { font-size: 0.75rem; color: var(--stone); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  .progress-bar {
+    height: 6px; background: var(--warm); border-radius: 3px;
+    margin-top: 14px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--gold); border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  .progress-fill.low { background: var(--red); }
+
+  .sign-session-btn {
+    background: var(--deep); color: var(--cream); border: none;
+    border-radius: 12px; padding: 16px; font-size: 1rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
+    cursor: pointer; transition: all 0.2s; width: 100%; margin-bottom: 20px;
+  }
+  .sign-session-btn:hover { background: var(--brown); }
+  .sign-session-btn:disabled { background: var(--stone); cursor: not-allowed; }
+
+  .history-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .session-entry {
+    background: var(--white); border-radius: 12px; padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(61,43,31,0.05);
+  }
+  .session-entry .session-num { font-weight: 500; color: var(--deep); font-size: 0.9rem; }
+  .session-entry .session-date { font-size: 0.78rem; color: var(--stone); }
+  .session-entry .signed-badge {
+    font-size: 0.7rem; color: var(--green); background: rgba(90,122,106,0.12);
+    padding: 3px 10px; border-radius: 10px; font-weight: 500;
+  }
+
+  /* ── SIGNATURE VIEW ── */
+  #signing { background: var(--white); }
+  #signing .content { flex: 1; padding: 24px; display: flex; flex-direction: column; }
+
+  .signing-info { margin-bottom: 20px; }
+  .signing-info h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; }
+  .signing-info p { color: var(--stone); font-size: 0.85rem; margin-top: 4px; }
+
+  .consent-box {
+    background: var(--cream); border-radius: 12px; padding: 16px 18px;
+    margin-bottom: 20px; border-left: 3px solid var(--gold);
+  }
+  .consent-box p { font-size: 0.82rem; color: var(--deep); line-height: 1.6; }
+
+  .canvas-wrapper {
+    flex: 1; border: 2px dashed var(--warm); border-radius: 14px;
+    position: relative; overflow: hidden; min-height: 200px;
+    background: var(--cream); margin-bottom: 16px;
+  }
+  canvas { width: 100%; height: 100%; display: block; touch-action: none; }
+
+  .canvas-label {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    color: var(--stone); font-size: 0.85rem; pointer-events: none;
+    text-align: center; transition: opacity 0.3s;
+  }
+
+  .sig-actions { display: flex; gap: 10px; margin-bottom: 16px; }
+  .clear-btn {
+    flex: 1; background: none; border: 1.5px solid var(--warm);
+    border-radius: 10px; padding: 12px; color: var(--stone);
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+  }
+  .clear-btn:hover { border-color: var(--stone); color: var(--deep); }
+
+  .confirm-btn {
+    flex: 2; background: var(--green); border: none;
+    border-radius: 10px; padding: 12px; color: var(--white);
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    font-weight: 500; cursor: pointer; transition: all 0.2s;
+  }
+  .confirm-btn:hover { background: #4a6a5a; }
+  .confirm-btn:disabled { background: var(--stone); cursor: not-allowed; }
+
+  /* ── ADD PATIENT MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(61,43,31,0.5); z-index: 100;
+    align-items: flex-end; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--white); border-radius: 20px 20px 0 0;
+    padding: 28px 24px 40px; width: 100%; max-width: 600px;
+  }
+  .modal h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; margin-bottom: 20px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--stone); margin-bottom: 6px; }
+  .form-group input {
+    width: 100%; background: var(--cream); border: 1.5px solid var(--warm);
+    border-radius: 10px; padding: 12px 14px; font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif; color: var(--deep); outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus { border-color: var(--gold); }
+  .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .modal-cancel {
+    flex: 1; background: none; border: 1.5px solid var(--warm);
+    border-radius: 10px; padding: 13px; color: var(--stone);
+    font-family: 'DM Sans', sans-serif; cursor: pointer;
+  }
+  .modal-save {
+    flex: 2; background: var(--gold); border: none;
+    border-radius: 10px; padding: 13px; color: var(--white);
+    font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .modal-save:hover { background: var(--brown); }
+
+  /* ── SUCCESS FLASH ── */
+  .success-flash {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--green); color: white; padding: 12px 24px;
+    border-radius: 30px; font-size: 0.85rem; font-weight: 500;
+    z-index: 200; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .success-flash.show { opacity: 1; }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--stone); }
+  .empty-state p { font-size: 0.9rem; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- SUCCESS FLASH -->
+<div class="success-flash" id="flash">✓ Sesión registrada exitosamente</div>
+
+<!-- ══════════ VIEW: HOME ══════════ -->
+<div class="view active" id="home">
+  <header>
+    <div>
+      <h1>Session Tracker</h1>
+      <span>Masajes Terapéuticos</span>
+    </div>
+  </header>
+  <div class="content">
+    <input class="search-bar" type="search" placeholder="Buscar paciente..." id="searchInput" oninput="renderPatients()">
+    <div class="section-label">Pacientes con paquete activo</div>
+    <div id="patientList"></div>
+    <button class="add-patient-btn" onclick="openModal()">+ Agregar nuevo paciente</button>
+  </div>
+</div>
+
+<!-- ══════════ VIEW: DETAIL ══════════ -->
+<div class="view" id="detail">
+  <header>
+    <h1 id="detailName">Paciente</h1>
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+  </header>
+  <div class="content">
+    <div class="patient-header">
+      <h2 id="detailFullName"></h2>
+      <p id="detailPkg"></p>
+      <div class="sessions-remaining">
+        <div>
+          <div class="big-number" id="detailRemaining">—</div>
+          <div class="sessions-label">sesiones restantes</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:0.78rem;color:var(--stone);margin-bottom:6px" id="detailUsed"></div>
+          <div class="progress-bar"><div class="progress-fill" id="detailProgress"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="sign-session-btn" id="signBtn" onclick="goSigning()">✍️ Firmar sesión de hoy</button>
+
+    <div class="section-label" style="margin-bottom:12px">Historial de sesiones</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</div>
+
+<!-- ══════════ VIEW: SIGNING ══════════ -->
+<div class="view" id="signing">
+  <header>
+    <h1>Firma de Sesión</h1>
+    <button class="back-btn" onclick="goDetail()">← Cancelar</button>
+  </header>
+  <div class="content">
+    <div class="signing-info">
+      <h2 id="signPatientName"></h2>
+      <p id="signSessionInfo"></p>
+    </div>
+
+    <div class="consent-box">
+      <p>Al firmar, confirmo que asistí y recibí mi sesión de masaje terapéutico el día de hoy. Entiendo que esta sesión será descontada de mi paquete.</p>
+    </div>
+
+    <div class="canvas-wrapper" id="canvasWrapper">
+      <canvas id="sigCanvas"></canvas>
+      <div class="canvas-label" id="canvasLabel">☝️ Firma aquí con tu dedo</div>
+    </div>
+
+    <div class="sig-actions">
+      <button class="clear-btn" onclick="clearSig()">Borrar</button>
+      <button class="confirm-btn" id="confirmBtn" onclick="confirmSession()" disabled>Confirmar sesión</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: ADD PATIENT ══════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Nuevo Paciente</h3>
+    <div class="form-group">
+      <label>Nombre completo</label>
+      <input type="text" id="newName" placeholder="Ej. María González">
+    </div>
+    <div class="form-group">
+      <label>Total de sesiones en el paquete</label>
+      <input type="number" id="newTotal" placeholder="Ej. 10" min="1" max="50">
+    </div>
+    <div class="form-group">
+      <label>Sesiones ya utilizadas (si aplica)</label>
+      <input type="number" id="newUsed" placeholder="0" min="0" max="50" value="0">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="modal-save" onclick="savePatient()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+let patients = JSON.parse(localStorage.getItem('mt_patients') || '[]');
+let currentPatientId = null;
+let hasSig = false;
+
+function save() { localStorage.setItem('mt_patients', JSON.stringify(patients)); }
+function getPatient() { return patients.find(p => p.id === currentPatientId); }
+
+// ── RENDER PATIENTS ──
+function renderPatients() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const list = document.getElementById('patientList');
+  const filtered = patients.filter(p => p.name.toLowerCase().includes(q));
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div style="font-size:2rem">💆</div><p>No hay pacientes aún.<br>Agrega uno con el botón de abajo.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(p => {
+    const rem = p.total - p.sessions.length;
+    const pct = Math.round((p.sessions.length / p.total) * 100);
+    const cls = rem === 0 ? 'done' : rem <= 2 ? 'low' : '';
+    const label = rem === 0 ? 'Completado' : `${rem} restantes`;
+    return `<div class="patient-card" onclick="openPatient('${p.id}')">
+      <div class="patient-info">
+        <h3>${p.name}</h3>
+        <p>${p.sessions.length} de ${p.total} sesiones usadas</p>
+      </div>
+      <div class="sessions-badge ${cls}">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── NAVIGATION ──
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goHome() { showView('home'); renderPatients(); }
+
+function openPatient(id) {
+  currentPatientId = id;
+  goDetail();
+}
+
+function goDetail() {
+  const p = getPatient();
+  if (!p) return;
+  const rem = p.total - p.sessions.length;
+  const pct = Math.round((p.sessions.length / p.total) * 100);
+
+  document.getElementById('detailName').textContent = p.name.split(' ')[0];
+  document.getElementById('detailFullName').textContent = p.name;
+  document.getElementById('detailPkg').textContent = `Paquete de ${p.total} sesiones`;
+  document.getElementById('detailRemaining').textContent = rem;
+  document.getElementById('detailRemaining').className = 'big-number' + (rem === 0 ? ' done' : rem <= 2 ? ' low' : '');
+  document.getElementById('detailUsed').textContent = `${p.sessions.length} sesiones completadas`;
+
+  const fill = document.getElementById('detailProgress');
+  fill.style.width = pct + '%';
+  fill.className = 'progress-fill' + (rem <= 2 && rem > 0 ? ' low' : '');
+
+  const signBtn = document.getElementById('signBtn');
+  signBtn.disabled = rem === 0;
+  signBtn.textContent = rem === 0 ? '✅ Paquete completado' : '✍️ Firmar sesión de hoy';
+
+  // History
+  const hist = document.getElementById('historyList');
+  if (p.sessions.length === 0) {
+    hist.innerHTML = `<div class="empty-state"><p>Aún no hay sesiones registradas.</p></div>`;
+  } else {
+    hist.innerHTML = [...p.sessions].reverse().map((s, i) => {
+      const num = p.sessions.length - i;
+      return `<div class="session-entry">
+        <div>
+          <div class="session-num">Sesión #${num}</div>
+          <div class="session-date">${s.date}</div>
+        </div>
+        <div class="signed-badge">✓ Firmada</div>
+      </div>`;
+    }).join('');
+  }
+
+  showView('detail');
+}
+
+function goSigning() {
+  const p = getPatient();
+  const rem = p.total - p.sessions.length;
+  const sessionNum = p.sessions.length + 1;
+  const today = new Date().toLocaleDateString('es-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  document.getElementById('signPatientName').textContent = p.name;
+  document.getElementById('signSessionInfo').textContent = `Sesión #${sessionNum} • ${today}`;
+
+  showView('signing');
+  initCanvas();
+}
+
+// ── SIGNATURE CANVAS ──
+let isDrawing = false, ctx, canvas;
+
+function initCanvas() {
+  canvas = document.getElementById('sigCanvas');
+  const wrapper = document.getElementById('canvasWrapper');
+  canvas.width = wrapper.clientWidth * window.devicePixelRatio;
+  canvas.height = wrapper.clientHeight * window.devicePixelRatio;
+  canvas.style.width = wrapper.clientWidth + 'px';
+  canvas.style.height = wrapper.clientHeight + 'px';
+  ctx = canvas.getContext('2d');
+  ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  ctx.strokeStyle = '#3D2B1F';
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  hasSig = false;
+  document.getElementById('confirmBtn').disabled = true;
+  document.getElementById('canvasLabel').style.opacity = '1';
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('touchstart', startDraw, { passive: false });
+  canvas.addEventListener('touchmove', draw, { passive: false });
+  canvas.addEventListener('touchend', endDraw);
+}
+
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return { x: src.clientX - r.left, y: src.clientY - r.top };
+}
+
+function startDraw(e) {
+  e.preventDefault();
+  isDrawing = true;
+  const {x,y} = getPos(e);
+  ctx.beginPath(); ctx.moveTo(x,y);
+  document.getElementById('canvasLabel').style.opacity = '0';
+}
+
+function draw(e) {
+  e.preventDefault();
+  if (!isDrawing) return;
+  const {x,y} = getPos(e);
+  ctx.lineTo(x,y); ctx.stroke();
+}
+
+function endDraw() {
+  isDrawing = false;
+  hasSig = true;
+  document.getElementById('confirmBtn').disabled = false;
+}
+
+function clearSig() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  hasSig = false;
+  document.getElementById('confirmBtn').disabled = true;
+  document.getElementById('canvasLabel').style.opacity = '1';
+}
+
+// ── CONFIRM SESSION ──
+function confirmSession() {
+  if (!hasSig) return;
+  const p = getPatient();
+  const today = new Date().toLocaleDateString('es-US', { year:'numeric', month:'long', day:'numeric' });
+  const sigData = canvas.toDataURL();
+
+  p.sessions.push({ date: today, sig: sigData });
+  save();
+
+  showFlash('✓ Sesión #' + p.sessions.length + ' registrada');
+  goDetail();
+}
+
+function showFlash(msg) {
+  const f = document.getElementById('flash');
+  f.textContent = msg;
+  f.classList.add('show');
+  setTimeout(() => f.classList.remove('show'), 3000);
+}
+
+// ── ADD PATIENT ──
+function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+function savePatient() {
+  const name = document.getElementById('newName').value.trim();
+  const total = parseInt(document.getElementById('newTotal').value);
+  const used = parseInt(document.getElementById('newUsed').value) || 0;
+
+  if (!name || !total || total < 1) { alert('Por favor completa nombre y total de sesiones.'); return; }
+  if (used >= total) { alert('Las sesiones usadas no pueden ser mayores o iguales al total.'); return; }
+
+  const fakeSessions = [];
+  for (let i = 0; i < used; i++) {
+    fakeSessions.push({ date: 'Sesión previa', sig: null });
+  }
+
+  patients.push({ id: Date.now().toString(), name, total, sessions: fakeSessions });
+  save();
+  closeModal();
+  document.getElementById('newName').value = '';
+  document.getElementById('newTotal').value = '';
+  document.getElementById('newUsed').value = '0';
+  renderPatients();
+}
+
+// ── INIT ──
+renderPatients();
+</script>
+</body>
+</html>
