@@ -22,8 +22,6 @@
   .header-actions { display: flex; gap: 8px; align-items: center; }
   .edit-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
   .edit-btn:hover { background: var(--gold); color: var(--deep); }
-
-  /* HOME */
   #home .content { flex: 1; padding: 32px 24px; display: flex; flex-direction: column; gap: 16px; }
   .search-bar { background: var(--white); border: 1.5px solid var(--warm); border-radius: 12px; padding: 12px 18px; font-size: 1rem; font-family: 'DM Sans', sans-serif; color: var(--deep); width: 100%; outline: none; transition: border-color 0.2s; }
   .search-bar:focus { border-color: var(--gold); }
@@ -37,8 +35,6 @@
   .sessions-badge.done { background: var(--stone); }
   .add-patient-btn { background: var(--gold); color: var(--white); border: none; border-radius: 12px; padding: 14px; font-size: 0.9rem; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
   .add-patient-btn:hover { background: var(--brown); }
-
-  /* DETAIL */
   #detail .content { flex: 1; padding: 28px 24px; overflow-y: auto; }
   .patient-header { background: var(--white); border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(61,43,31,0.06); }
   .patient-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; }
@@ -59,8 +55,6 @@
   .session-entry .session-num { font-weight: 500; font-size: 0.9rem; }
   .session-entry .session-date { font-size: 0.78rem; color: var(--stone); }
   .signed-badge { font-size: 0.7rem; color: var(--green); background: rgba(90,122,106,0.12); padding: 3px 10px; border-radius: 10px; font-weight: 500; }
-
-  /* SIGNING */
   #signing { background: var(--white); }
   #signing .content { flex: 1; padding: 24px; display: flex; flex-direction: column; }
   .signing-info { margin-bottom: 20px; }
@@ -75,8 +69,6 @@
   .clear-btn { flex: 1; background: none; border: 1.5px solid var(--warm); border-radius: 10px; padding: 12px; color: var(--stone); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; }
   .confirm-btn { flex: 2; background: var(--green); border: none; border-radius: 10px; padding: 12px; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; }
   .confirm-btn:disabled { background: var(--stone); cursor: not-allowed; }
-
-  /* MODAL — shared styles */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(61,43,31,0.5); z-index: 100; align-items: flex-end; justify-content: center; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--white); border-radius: 20px 20px 0 0; padding: 28px 24px 40px; width: 100%; max-width: 600px; }
@@ -91,18 +83,15 @@
   .modal-save:hover { background: var(--brown); }
   .modal-delete { flex: 1; background: none; border: 1.5px solid var(--red); border-radius: 10px; padding: 13px; color: var(--red); font-family: 'DM Sans', sans-serif; cursor: pointer; }
   .modal-delete:hover { background: var(--red); color: white; }
-
-  /* EDIT MODAL — session counter */
-  .counter-row { display: flex; align-items: center; justify-content: space-between; background: var(--cream); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+  .divider { height: 1px; background: var(--warm); margin: 16px 0; }
+  .counter-row { display: flex; align-items: center; justify-content: space-between; background: var(--cream); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; }
   .counter-label { font-size: 0.85rem; color: var(--deep); }
   .counter-label span { display: block; font-size: 0.72rem; color: var(--stone); margin-top: 2px; }
   .counter-controls { display: flex; align-items: center; gap: 14px; }
-  .counter-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--warm); background: var(--white); color: var(--deep); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+  .counter-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--warm); background: var(--white); color: var(--deep); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-family: 'DM Sans', sans-serif; line-height: 1; }
   .counter-btn:hover { border-color: var(--gold); background: var(--gold); color: white; }
   .counter-btn:disabled { opacity: 0.3; cursor: not-allowed; }
   .counter-value { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 400; min-width: 32px; text-align: center; }
-
-  /* FLASH & MISC */
   .success-flash { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--green); color: white; padding: 12px 24px; border-radius: 30px; font-size: 0.85rem; font-weight: 500; z-index: 200; opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
   .success-flash.show { opacity: 1; }
   .empty-state { text-align: center; padding: 40px 20px; color: var(--stone); }
@@ -111,7 +100,6 @@
   .sync-indicator { font-size: 0.7rem; color: var(--stone); display: flex; align-items: center; gap: 6px; }
   .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .divider { height: 1px; background: var(--warm); margin: 16px 0; }
 </style>
 </head>
 <body>
@@ -187,7 +175,7 @@
   </div>
 </div>
 
-<!-- MODAL: ADD PATIENT -->
+<!-- MODAL: ADD -->
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <h3>Nuevo Paciente</h3>
@@ -210,19 +198,15 @@
   </div>
 </div>
 
-<!-- MODAL: EDIT PATIENT -->
+<!-- MODAL: EDIT -->
 <div class="modal-overlay" id="editModal">
   <div class="modal">
     <h3 id="editModalTitle">Editar Paciente</h3>
-
     <div class="form-group">
       <label>Nombre completo</label>
-      <input type="text" id="editName" placeholder="Nombre del paciente">
+      <input type="text" id="editName">
     </div>
-
     <div class="divider"></div>
-
-    <!-- Total sessions counter -->
     <div class="counter-row">
       <div class="counter-label">
         Total de sesiones
@@ -234,12 +218,10 @@
         <button class="counter-btn" onclick="changeTotal(1)">+</button>
       </div>
     </div>
-
-    <!-- Used sessions counter -->
     <div class="counter-row">
       <div class="counter-label">
         Sesiones utilizadas
-        <span>Ajusta si hay error</span>
+        <span>Ajusta si hay un error</span>
       </div>
       <div class="counter-controls">
         <button class="counter-btn" id="usedMinus" onclick="changeUsed(-1)">−</button>
@@ -247,13 +229,10 @@
         <button class="counter-btn" id="usedPlus" onclick="changeUsed(1)">+</button>
       </div>
     </div>
-
-    <!-- Summary -->
     <div style="background:var(--cream);border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
       <span style="font-size:0.82rem;color:var(--stone)">Sesiones restantes</span>
       <span style="font-weight:600;color:var(--gold);font-size:1.1rem" id="editRemaining">10</span>
     </div>
-
     <div class="modal-actions">
       <button class="modal-delete" onclick="confirmDelete()">🗑 Eliminar</button>
       <button class="modal-cancel" onclick="closeEditModal()">Cancelar</button>
@@ -278,15 +257,10 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  let patients = [];
-  let currentPatientId = null;
+  let patients = [], currentPatientId = null;
   let hasSig = false, isDrawing = false, ctx, canvas;
+  let editTotal = 10, editUsed = 0;
 
-  // Edit modal temp state
-  let editTotal = 10;
-  let editUsed = 0;
-
-  // ── REAL-TIME SYNC ──
   const q = query(collection(db, "patients"), orderBy("name"));
   onSnapshot(q, (snapshot) => {
     patients = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -296,7 +270,6 @@
 
   function getPatient() { return patients.find(p => p.id === currentPatientId); }
 
-  // ── RENDER HOME ──
   window.renderPatients = function() {
     const search = document.getElementById('searchInput').value.toLowerCase();
     const list = document.getElementById('patientList');
@@ -310,10 +283,7 @@
       const cls = rem === 0 ? 'done' : rem <= 2 ? 'low' : '';
       const label = rem === 0 ? 'Completado' : `${rem} restantes`;
       return `<div class="patient-card" onclick="window.openPatient('${p.id}')">
-        <div class="patient-info">
-          <h3>${p.name}</h3>
-          <p>${(p.sessions||[]).length} de ${p.total} sesiones usadas</p>
-        </div>
+        <div class="patient-info"><h3>${p.name}</h3><p>${(p.sessions||[]).length} de ${p.total} sesiones usadas</p></div>
         <div class="sessions-badge ${cls}">${label}</div>
       </div>`;
     }).join('');
@@ -328,11 +298,11 @@
     document.getElementById('detailFullName').textContent = p.name;
     document.getElementById('detailPkg').textContent = `Paquete de ${p.total} sesiones`;
     document.getElementById('detailRemaining').textContent = rem;
-    document.getElementById('detailRemaining').className = 'big-number' + (rem===0?' done':rem<=2?' low':'');
+    document.getElementById('detailRemaining').className = 'big-number'+(rem===0?' done':rem<=2?' low':'');
     document.getElementById('detailUsed').textContent = `${sessions.length} sesiones completadas`;
     const fill = document.getElementById('detailProgress');
-    fill.style.width = pct + '%';
-    fill.className = 'progress-fill' + (rem<=2&&rem>0?' low':'');
+    fill.style.width = pct+'%';
+    fill.className = 'progress-fill'+(rem<=2&&rem>0?' low':'');
     const signBtn = document.getElementById('signBtn');
     signBtn.disabled = rem === 0;
     signBtn.textContent = rem === 0 ? '✅ Paquete completado' : '✍️ Firmar sesión de hoy';
@@ -340,7 +310,7 @@
     if (sessions.length === 0) {
       hist.innerHTML = `<div class="empty-state"><p>Aún no hay sesiones registradas.</p></div>`;
     } else {
-      hist.innerHTML = [...sessions].reverse().map((s, i) => {
+      hist.innerHTML = [...sessions].reverse().map((s,i) => {
         const num = sessions.length - i;
         return `<div class="session-entry">
           <div><div class="session-num">Sesión #${num}</div><div class="session-date">${s.date}</div></div>
@@ -350,19 +320,20 @@
     }
   }
 
-  // ── NAVIGATION ──
   function showView(id) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     window.scrollTo(0,0);
   }
+
   window.goHome = () => showView('home');
   window.openPatient = function(id) { currentPatientId = id; refreshDetail(); showView('detail'); }
   window.goDetail = () => { refreshDetail(); showView('detail'); }
+
   window.goSigning = function() {
     const p = getPatient();
     const sessions = p.sessions || [];
-    const today = new Date().toLocaleDateString('es-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    const today = new Date().toLocaleDateString('es-US', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
     document.getElementById('signPatientName').textContent = p.name;
     document.getElementById('signSessionInfo').textContent = `Sesión #${sessions.length+1} • ${today}`;
     showView('signing'); initCanvas();
@@ -390,35 +361,27 @@
   }
 
   window.changeTotal = function(delta) {
-    const newVal = editTotal + delta;
-    if (newVal < editUsed + 1) return;
-    editTotal = newVal;
-    updateEditDisplay();
+    const v = editTotal + delta;
+    if (v < editUsed + 1 || v < 1) return;
+    editTotal = v; updateEditDisplay();
   }
-
   window.changeUsed = function(delta) {
-    const newVal = editUsed + delta;
-    if (newVal < 0 || newVal > editTotal) return;
-    editUsed = newVal;
-    updateEditDisplay();
+    const v = editUsed + delta;
+    if (v < 0 || v > editTotal) return;
+    editUsed = v; updateEditDisplay();
   }
 
   window.saveEdits = async function() {
     const p = getPatient(); if (!p) return;
     const newName = document.getElementById('editName').value.trim();
     if (!newName) { alert('El nombre no puede estar vacío.'); return; }
-
-    // Adjust sessions array to match editUsed
     let sessions = [...(p.sessions||[])];
     if (editUsed < sessions.length) {
-      // Remove sessions from the end
       sessions = sessions.slice(0, editUsed);
     } else if (editUsed > sessions.length) {
-      // Add placeholder sessions
       const toAdd = editUsed - sessions.length;
       for (let i = 0; i < toAdd; i++) sessions.push({ date: 'Sesión previa', sig: null });
     }
-
     await updateDoc(doc(db, "patients", p.id), { name: newName, total: editTotal, sessions });
     closeEditModal();
     showFlash('✓ Paciente actualizado');
@@ -434,7 +397,7 @@
     }
   }
 
-  // ── ADD PATIENT MODAL ──
+  // ── ADD MODAL ──
   window.openAddModal = () => document.getElementById('addModal').classList.add('open');
   window.closeAddModal = () => document.getElementById('addModal').classList.remove('open');
 
@@ -459,41 +422,41 @@
     const wrapper = document.getElementById('canvasWrapper');
     canvas.width = wrapper.clientWidth * window.devicePixelRatio;
     canvas.height = wrapper.clientHeight * window.devicePixelRatio;
-    canvas.style.width = wrapper.clientWidth + 'px';
-    canvas.style.height = wrapper.clientHeight + 'px';
+    canvas.style.width = wrapper.clientWidth+'px';
+    canvas.style.height = wrapper.clientHeight+'px';
     ctx = canvas.getContext('2d');
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    ctx.strokeStyle = '#3D2B1F'; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    hasSig = false;
-    document.getElementById('confirmBtn').disabled = true;
-    document.getElementById('canvasLabel').style.opacity = '1';
+    ctx.strokeStyle='#3D2B1F'; ctx.lineWidth=2.5; ctx.lineCap='round'; ctx.lineJoin='round';
+    hasSig=false;
+    document.getElementById('confirmBtn').disabled=true;
+    document.getElementById('canvasLabel').style.opacity='1';
     canvas.addEventListener('mousedown', startDraw);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', endDraw);
-    canvas.addEventListener('touchstart', startDraw, { passive: false });
-    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchstart', startDraw, {passive:false});
+    canvas.addEventListener('touchmove', draw, {passive:false});
     canvas.addEventListener('touchend', endDraw);
   }
-  function getPos(e) { const r=canvas.getBoundingClientRect(); const src=e.touches?e.touches[0]:e; return{x:src.clientX-r.left,y:src.clientY-r.top}; }
+  function getPos(e) { const r=canvas.getBoundingClientRect(); const s=e.touches?e.touches[0]:e; return{x:s.clientX-r.left,y:s.clientY-r.top}; }
   function startDraw(e) { e.preventDefault(); isDrawing=true; const{x,y}=getPos(e); ctx.beginPath(); ctx.moveTo(x,y); document.getElementById('canvasLabel').style.opacity='0'; }
   function draw(e) { e.preventDefault(); if(!isDrawing)return; const{x,y}=getPos(e); ctx.lineTo(x,y); ctx.stroke(); }
   function endDraw() { isDrawing=false; hasSig=true; document.getElementById('confirmBtn').disabled=false; }
-  window.clearSig = function() { ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; document.getElementById('confirmBtn').disabled=true; document.getElementById('canvasLabel').style.opacity='1'; }
+  window.clearSig = () => { ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; document.getElementById('confirmBtn').disabled=true; document.getElementById('canvasLabel').style.opacity='1'; }
 
   window.confirmSession = async function() {
     if (!hasSig) return;
     const p = getPatient();
-    const today = new Date().toLocaleDateString('es-US', { year:'numeric', month:'long', day:'numeric' });
+    const today = new Date().toLocaleDateString('es-US', {year:'numeric',month:'long',day:'numeric'});
     const sessions = [...(p.sessions||[]), { date: today, sig: canvas.toDataURL() }];
     await updateDoc(doc(db, "patients", p.id), { sessions });
-    showFlash('✓ Sesión #' + sessions.length + ' registrada');
+    showFlash('✓ Sesión #'+sessions.length+' registrada');
     goDetail();
   }
 
   function showFlash(msg) {
-    const f = document.getElementById('flash');
-    f.textContent = msg; f.classList.add('show');
-    setTimeout(() => f.classList.remove('show'), 3000);
+    const f=document.getElementById('flash');
+    f.textContent=msg; f.classList.add('show');
+    setTimeout(()=>f.classList.remove('show'), 3000);
   }
 </script>
 </body>
